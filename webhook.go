@@ -1,16 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gtuk/discordwebhook"
 )
 
-func publishToHook(t string, c string) {
+func publishToHook(title string, desc string, content string) {
+
+	content = fmt.Sprintf("%s\n\n%s", desc, content)
 
 	message := discordwebhook.Message{
-		Username: &t,
-		Content:  &c,
+		Username: &title,
+		Content:  &content,
 	}
 
 	err := discordwebhook.SendMessage(url, message)

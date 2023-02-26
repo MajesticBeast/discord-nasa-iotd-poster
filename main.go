@@ -7,6 +7,12 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
+type msgItem struct {
+	title string
+	desc  string
+	url   string
+}
+
 func main() {
 
 	feedURL := "https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss"
@@ -14,7 +20,7 @@ func main() {
 	var currentItem string
 
 	for {
-		time.Sleep(5 * time.Minute)
+		time.Sleep(5 * time.Second)
 
 		// Load the feed
 		nasaRSS, err := fp.ParseURL(feedURL)
@@ -32,10 +38,15 @@ func main() {
 		currentItem = nasaRSS.Items[0].Title
 
 		// Print the new item
+		item := msgItem{
+			title: nasaRSS.Items[0].Title,
+			desc:  nasaRSS.Items[0].Description,
+			url:   nasaRSS.Items[0].Enclosures[0].URL,
+		}
 		fmt.Println(nasaRSS.Items[0].Title)
+		fmt.Println(nasaRSS.Items[0].Description)
 		fmt.Println(nasaRSS.Items[0].Enclosures[0].URL)
 
-		publishToHook(nasaRSS.Items[0].Title, nasaRSS.Items[0].Enclosures[0].URL)
+		publishToHook(item.title, item.desc, item.url)
 	}
-
 }
