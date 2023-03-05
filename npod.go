@@ -6,7 +6,9 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func getNPOD(cfg *currentItems) {
+var item msgItem
+
+func getNPOD(cfg *currentItems) msgItem {
 
 	feedURL := "https://www.nasa.gov/rss/dyn/lg_image_of_the_day.rss"
 	fp := gofeed.NewParser()
@@ -19,7 +21,7 @@ func getNPOD(cfg *currentItems) {
 	// Check if there is an update to the feed,
 	if cfg.npodCI == nasaRSS.Items[0].Title {
 		fmt.Println("No updated image.")
-		return
+		return item
 	}
 
 	cfg.npodCI = nasaRSS.Items[0].Title
@@ -30,7 +32,5 @@ func getNPOD(cfg *currentItems) {
 		url:   nasaRSS.Items[0].Enclosures[0].URL,
 	}
 
-	fmt.Println(item.title)
-	fmt.Println(item.desc)
-	fmt.Println(item.url)
+	return item
 }

@@ -11,20 +11,26 @@ type msgItem struct {
 }
 
 type currentItems struct {
-	apodCI string
 	npodCI string
 }
 
 func main() {
 
 	cfg := currentItems{
-		apodCI: "",
 		npodCI: "",
 	}
 
+	item := getNPOD(&cfg)
+	publishToHook(item.title, item.desc, item.url)
+
 	for {
 		time.Sleep(4 * time.Hour)
+		item = getNPOD(&cfg)
 
-		getNPOD(&cfg)
+		if len(item.title) < 1 {
+			continue
+		}
+
+		publishToHook(item.title, item.desc, item.url)
 	}
 }
